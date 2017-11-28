@@ -13,3 +13,25 @@ Output the plan before applied like dry-run
 Apply
 
 `# terraform apply`
+
+They will occured as below vms
+
+ocmaster-1
+
+ocmaster-2
+
+ocmaster-3
+
+ocinfra-1
+
+ocinfra-2
+
+ocinfra-3
+
+ocnode-1
+
+ocnode-2
+
+ocnode-3
+
+oclb
