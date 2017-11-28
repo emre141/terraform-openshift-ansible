@@ -1,0 +1,73 @@
+# Create an OSEv3 group that contains the master, nodes, etcd, and lb groups.
+# The lb group lets Ansible configure HAProxy as the load balancing solution.
+penshift_logging_fluentd_nodeselector
+# Comment lb out if your load balancer is pre-configured.
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+ansible_ssh_user=root
+openshift_master_default_subdomain=app.lp.int
+openshift_deployment_type=openshift-enterprise
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=openshift.lp.int
+openshift_master_cluster_public_hostname=openshift.lp.int
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+############ GLUSTERFS DEFINITION #####################
+
+
+
+###########LOGGING DEFINITION###############
+openshift_logging_install_logging=true
+openshift_logging_use_ops=true
+openshift_logging_namespace=logging
+openshift_logging_master_public_url=openshift.lp.int                           ## bu değer openshift.lp.int -> oclb.lp.int e yönlendiriyor.
+openshift_logging_curator_nodeselector={"region":"infra"}
+openshift_logging_kibana_hostname=kibana.app.lp.int
+openshift_logging_kibana_nodeselector={"region":"infra"}
+openshift_logging_kibana_ops_hostname=kibana-ops.app.lp.int
+openshift_logging_fluentd_nodeselector={"region":"infra"}
+openshift_logging_es_pv_selector={"logging":"elastic"}
+openshift_logging_es_pvc_size=10G
+openshift_logging_es_pvc_prefix=logging-es
+openshift_logging_es_storage_group=65000
+openshift_logging_es_nodeselector={"region":"infra"}
+openshift_logging_es_ops_allow_cluster_reader=true
+openshift_logging_es_ops_pv_selector={"logging-ops":"elastic-ops"}
+openshift_logging_es_ops_pvc_size=10G
+openshift_logging_es_ops_pvc_prefix=logging-es-ops
+openshift_logging_es_ops_storage_group=65001
+openshift_logging_es_ops_nodeselector={"region":"infra"}
+openshift_logging_kibana_ops_nodeselector={"region":"infra"}
+openshift_logging_curator_ops_nodeselector={"region":"infra"}
+
+
+
+# host group for masters
+
+[masters]
+ocmaster-1.lp.int
+ocmaster-2.lp.int
+ocmaster-3.lp.int
+# host group for etcd
+
+[etcd]
+ocmaster-1.lp.int
+ocmaster-2.lp.int
+ocmaster-3.lp.int
+
+# Specify load balancer host
+[lb]
+oclb.lp.int
+# host group for nodes, includes region info
+[nodes]
+ocmaster-[1:3].lp.int
+ocnode-1.lp.int openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+ocnode-2.lp.int openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+ocnode-3.lp.int openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+ocinfra-1.lp.int openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+ocinfra-2.lp.int openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+ocinfra-3.lp.int openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
