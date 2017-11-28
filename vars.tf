@@ -1,11 +1,11 @@
 variable "viuser" {
-   default = "lpadmin@vsphere.local"
+   default = "vcenter_username"
 }
 variable "vipassword" {
-   default = "4l+1li-6@nYaM"
+   default = "vcenter_password"
 }
 variable "viserver" {
-  default = "192.168.189.17"
+  default = "vcenter_password"
 }
 
 // default VM name in vSphere

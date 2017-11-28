@@ -18,13 +18,13 @@ resource "vsphere_virtual_machine" "ocplatform" {
   vcpu   = 1
   memory = 1024
   domain = "linkplus.int"
-  dns_servers = ["192.168.191.13"]
+  dns_servers = ["dns_server_ip"]
 
   network_interface {
     label = "dvPG_301_Demo1"
-    ipv4_address = "192.168.191.${63 + count.index}"
+    ipv4_address = "start-with.${63 + count.index}"
     ipv4_prefix_length = "24"
-    ipv4_gateway = "192.168.191.250"
+    ipv4_gateway = "gw_ip"
   }
 
   disk {
@@ -43,14 +43,14 @@ resource "vsphere_virtual_machine" "ocloadbalancer" {
   vcpu   = 1
   memory = 1024
   domain = "linkplus.int"
-  dns_servers = ["192.168.191.13"]
+  dns_servers = ["dns_server_ip"]
 
 
  network_interface {
   label = "dvPG_301_Demo1"
-  ipv4_address = "192.168.191.173"
+  ipv4_address = "ip_address"
   ipv4_prefix_length = "24"
-  ipv4_gateway = "192.168.191.250"
+  ipv4_gateway = "gw_ip"
   }
 
  disk {
